@@ -13,10 +13,11 @@ object BencodeParser extends RegexParsers {
   private lazy val integer: Parser[Long] = 'i' ~> """-{0,1}(?!0)\d+""".r <~ 'e' ^^ (_.toLong)
 
   // Parser for B-encode byte strings
-  private lazy val byteString: Parser[String] = """\d+""".r <~ ':' >> (len => s""".{$len}""".r)
+  private lazy val byteString: Parser[String] = """\d+""".r <~ ':' >> (len => repN(len.toInt, any) ^^ (_.mkString))
+  private lazy val any = elem("any", Function.const(true))
 
   // Parser for B-encode lists
-  private lazy val list: Parser[Any] = 'l' ~> rep(grammar) <~ 'e'
+  private lazy val list: Parser[Seq[Any]] = 'l' ~> rep(grammar) <~ 'e'
 
   // Parser for B-encode dictionaries
   private lazy val dictionary: Parser[Map[String, Any]] = 'd' ~> entries <~ 'e' ^^ (_.toMap)
