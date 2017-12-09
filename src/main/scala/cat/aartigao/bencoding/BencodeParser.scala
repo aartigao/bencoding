@@ -1,6 +1,6 @@
 package cat.aartigao.bencoding
 
-import scala.util.parsing.combinator.{JavaTokenParsers, RegexParsers}
+import scala.util.parsing.combinator.RegexParsers
 import scala.util.parsing.input.Reader
 
 object BencodeParser extends RegexParsers {
